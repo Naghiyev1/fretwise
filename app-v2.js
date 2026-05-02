@@ -526,6 +526,127 @@ const CHORDS = [
     ],
     transitions: ["G", "Em7", "Dsus4"]
   }
+,
+  {
+    id: "b7",
+    symbol: "B7",
+    name: "B7",
+    category: "seventh",
+    difficulty: "Beginner",
+    summary: "A useful dominant 7th chord, especially in the key of E.",
+    frets: ["x", 2, 1, 2, 0, 2],
+    fingers: ["x", 2, 1, 3, 0, 4],
+    notes: ["x", "B", "D#", "A", "B", "F#"],
+    root: "B",
+    theory: "B7 is built from B, D#, F#, and A. The A gives it the dominant 7th tension that resolves naturally to E.",
+    tips: [
+      "Place the index finger first on the D string 1st fret.",
+      "Keep the B string open and ringing.",
+      "Strum from the A string downward."
+    ],
+    mistakes: [
+      "Muting the open B string.",
+      "Playing the low E string.",
+      "Letting the pinky collapse on the high E string."
+    ],
+    transitions: ["E", "E7", "A"]
+  },
+  {
+    id: "bm",
+    symbol: "Bm",
+    name: "B Minor",
+    category: "barre",
+    difficulty: "Intermediate",
+    summary: "A common minor barre chord based on the A minor shape.",
+    frets: ["x", 2, 4, 4, 3, 2],
+    fingers: ["x", 1, 3, 4, 2, 1],
+    notes: ["x", "B", "F#", "B", "D", "F#"],
+    root: "B",
+    theory: "B minor is built from B, D, and F#. This shape moves the A minor chord shape up two frets with a barre.",
+    tips: [
+      "Use the side of the index finger for the barre.",
+      "Do not force the low E string; it is muted.",
+      "Place the non-barre fingers first, then settle the barre."
+    ],
+    mistakes: [
+      "Pressing the barre with the soft flat part of the finger.",
+      "Squeezing too hard with the thumb.",
+      "Muting the B string with the ring finger."
+    ],
+    transitions: ["G", "D", "A"]
+  },
+  {
+    id: "f-sharp-minor",
+    symbol: "F#m",
+    name: "F# Minor",
+    category: "barre",
+    difficulty: "Intermediate",
+    summary: "A minor barre chord based on the E minor shape.",
+    frets: [2, 4, 4, 2, 2, 2],
+    fingers: [1, 3, 4, 1, 1, 1],
+    notes: ["F#", "C#", "F#", "A", "C#", "F#"],
+    root: "F#",
+    theory: "F# minor is built from F#, A, and C#. This is the E minor shape moved up to the 2nd fret with a full barre.",
+    tips: [
+      "Let the index finger act as a movable nut.",
+      "Keep the wrist relaxed and use arm weight.",
+      "Check the G and B strings carefully; they often buzz in barre chords."
+    ],
+    mistakes: [
+      "Twisting the wrist too far.",
+      "Trying to solve everything with thumb pressure.",
+      "Ignoring one muted string because the overall chord seems loud."
+    ],
+    transitions: ["A", "D", "E"]
+  },
+  {
+    id: "bb-major",
+    symbol: "Bb",
+    name: "Bb Major",
+    category: "barre",
+    difficulty: "Intermediate",
+    summary: "A compact A-shape barre chord.",
+    frets: ["x", 1, 3, 3, 3, 1],
+    fingers: ["x", 1, 3, 3, 3, 1],
+    notes: ["x", "Bb", "F", "Bb", "D", "F"],
+    root: "Bb",
+    theory: "Bb major is built from Bb, D, and F. This is an A major shape moved up one fret with a barre.",
+    tips: [
+      "You can use the ring finger to mini-barre the 3rd fret notes.",
+      "Mute the low E string.",
+      "Aim for clarity before volume."
+    ],
+    mistakes: [
+      "Letting the high E string ring badly if the barre is not clean.",
+      "Pressing too hard with the ring finger.",
+      "Playing the low E string."
+    ],
+    transitions: ["F", "C", "Gm"]
+  },
+  {
+    id: "g-minor",
+    symbol: "Gm",
+    name: "G Minor",
+    category: "barre",
+    difficulty: "Intermediate",
+    summary: "A movable minor barre shape.",
+    frets: [3, 5, 5, 3, 3, 3],
+    fingers: [1, 3, 4, 1, 1, 1],
+    notes: ["G", "D", "G", "Bb", "D", "G"],
+    root: "G",
+    theory: "G minor is built from G, Bb, and D. This is the E minor shape moved to the 3rd fret.",
+    tips: [
+      "Keep the barre close to the 3rd fret.",
+      "Use ring and pinky for the 5th fret notes.",
+      "Practice moving between G and Gm to hear the emotional change."
+    ],
+    mistakes: [
+      "Flattening the hand too much.",
+      "Letting the B string buzz.",
+      "Not rolling the index finger slightly onto its side."
+    ],
+    transitions: ["Bb", "F", "Cm"]
+  }
 ];
 
 const chordList = document.getElementById("chordList");
@@ -535,6 +656,21 @@ const categorySelect = document.getElementById("categorySelect");
 const randomButton = document.getElementById("randomButton");
 const themeToggle = document.getElementById("themeToggle");
 const practiceButton = document.getElementById("practiceButton");
+const soundButton = document.getElementById("soundButton");
+const leftyButton = document.getElementById("leftyButton");
+const practiceSelect = document.getElementById("practiceSelect");
+const startPracticeButton = document.getElementById("startPracticeButton");
+const nextPracticeButton = document.getElementById("nextPracticeButton");
+const stopPracticeButton = document.getElementById("stopPracticeButton");
+const practiceTimer = document.getElementById("practiceTimer");
+const practiceChord = document.getElementById("practiceChord");
+const practiceHint = document.getElementById("practiceHint");
+const progressionList = document.getElementById("progressionList");
+const lessonPath = document.getElementById("lessonPath");
+const scaleRootSelect = document.getElementById("scaleRootSelect");
+const scaleTypeSelect = document.getElementById("scaleTypeSelect");
+const scaleText = document.getElementById("scaleText");
+const scaleNotes = document.getElementById("scaleNotes");
 
 const chordCategory = document.getElementById("chordCategory");
 const chordName = document.getElementById("chordName");
@@ -553,6 +689,34 @@ const transitionRow = document.getElementById("transitionRow");
 let selectedChordId = localStorage.getItem("fretwiseSelectedChord") || "c-major";
 let practiceList = JSON.parse(localStorage.getItem("fretwisePracticeList") || "[]");
 let theme = localStorage.getItem("fretwiseTheme") || "light";
+let leftyMode = localStorage.getItem("fretwiseLefty") || "off";
+let practiceInterval = null;
+let practiceSeconds = 30;
+let currentPracticeSequence = [];
+let currentPracticeIndex = 0;
+
+const PROGRESSIONS = [
+  { id: "pop-axis", name: "C–G–Am–F", chords: ["C", "G", "Am", "Fmaj7"], note: "The classic pop progression. Use Fmaj7 as a beginner-friendly F." },
+  { id: "g-family", name: "G–D–Em–C", chords: ["G", "D", "Em", "C"], note: "A guitar-friendly progression with lots of open strings." },
+  { id: "blues-a", name: "12-bar blues in A", chords: ["A7", "D7", "A7", "A7", "D7", "D7", "A7", "A7", "E7", "D7", "A7", "E7"], note: "A simple dominant 7th blues form." }
+];
+
+const LESSONS = [
+  { name: "First four chords", chords: ["Em", "G", "C", "D"], note: "Start here. These chords appear in thousands of songs." },
+  { name: "Minor mood", chords: ["Am", "Dm", "Em", "C"], note: "Learn how minor chords change the emotional color." },
+  { name: "Dominant 7th basics", chords: ["G7", "C7", "D7", "A7", "E7"], note: "Essential for blues, folk, country and classic progressions." },
+  { name: "Suspended colors", chords: ["Dsus2", "Dsus4", "Asus2", "Asus4", "Cadd9"], note: "Add movement without changing the whole chord shape." },
+  { name: "Barre chord entry", chords: ["F", "Bm", "F#m", "Bb"], note: "Train index-finger strength gradually. Clean beats loud." }
+];
+
+const SCALE_DEFS = {
+  major: { name: "Major scale", intervals: [0, 2, 4, 5, 7, 9, 11], formula: "1 2 3 4 5 6 7" },
+  minor: { name: "Natural minor", intervals: [0, 2, 3, 5, 7, 8, 10], formula: "1 2 ♭3 4 5 ♭6 ♭7" },
+  pentatonicMinor: { name: "Minor pentatonic", intervals: [0, 3, 5, 7, 10], formula: "1 ♭3 4 5 ♭7" },
+  blues: { name: "Blues scale", intervals: [0, 3, 5, 6, 7, 10], formula: "1 ♭3 4 ♭5 5 ♭7" }
+};
+
+const NOTE_NAMES = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
 
 function getFilteredChords() {
   const search = searchInput.value.trim().toLowerCase();
@@ -889,10 +1053,225 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
+
+function noteToFrequency(note, octave = 4) {
+  const normalized = String(note).replace("♭", "b").replace("Db", "C#").replace("Gb", "F#").replace("Cb", "B").replace("Fb", "E");
+  const semitoneMap = {
+    C: 0, "C#": 1, Db: 1, D: 2, "D#": 3, Eb: 3, E: 4, F: 5, "F#": 6, Gb: 6, G: 7, "G#": 8, Ab: 8, A: 9, "A#": 10, Bb: 10, B: 11
+  };
+  const semitone = semitoneMap[normalized] ?? 0;
+  const midi = (octave + 1) * 12 + semitone;
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+function playSelectedChordSound() {
+  const chord = getSelectedChord();
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContextClass) {
+    alert("Your browser does not support Web Audio.");
+    return;
+  }
+
+  const context = new AudioContextClass();
+  const uniqueNotes = [...new Set(chord.notes.filter(note => note !== "x"))];
+  const now = context.currentTime;
+
+  uniqueNotes.forEach((note, index) => {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+
+    oscillator.type = "triangle";
+    oscillator.frequency.value = noteToFrequency(note, index < 2 ? 3 : 4);
+
+    gain.gain.setValueAtTime(0, now + index * 0.11);
+    gain.gain.linearRampToValueAtTime(0.12, now + index * 0.11 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.7 + index * 0.04);
+
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start(now + index * 0.11);
+    oscillator.stop(now + 1.9 + index * 0.04);
+  });
+}
+
+function applyLeftyMode(mode) {
+  const safeMode = mode === "on" ? "on" : "off";
+  document.body.classList.toggle("lefty", safeMode === "on");
+  leftyButton.textContent = safeMode === "on" ? "Right-handed" : "Left-handed";
+  leftyButton.classList.toggle("active", safeMode === "on");
+  localStorage.setItem("fretwiseLefty", safeMode);
+  leftyMode = safeMode;
+}
+
+function toggleLeftyMode() {
+  applyLeftyMode(leftyMode === "on" ? "off" : "on");
+}
+
+function renderProgressions() {
+  progressionList.innerHTML = PROGRESSIONS.map(prog => `
+    <button class="progression-button" type="button" data-progression="${prog.id}">
+      <strong>${escapeHTML(prog.name)}</strong>
+      <span>${escapeHTML(prog.note)}</span>
+    </button>
+  `).join("");
+
+  progressionList.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", () => {
+      const progression = PROGRESSIONS.find(item => item.id === button.dataset.progression);
+      if (progression) {
+        startSequence(progression.chords, progression.name);
+      }
+    });
+  });
+}
+
+function renderLessonPath() {
+  lessonPath.innerHTML = LESSONS.map((lesson, index) => `
+    <button class="lesson-button" type="button" data-lesson="${index}">
+      <strong>${index + 1}. ${escapeHTML(lesson.name)}</strong>
+      <span>${escapeHTML(lesson.note)}</span>
+    </button>
+  `).join("");
+
+  lessonPath.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", () => {
+      const lesson = LESSONS[Number(button.dataset.lesson)];
+      if (lesson) {
+        startSequence(lesson.chords, lesson.name);
+      }
+    });
+  });
+}
+
+function symbolsToChordIds(symbols) {
+  return symbols
+    .map(symbol => CHORDS.find(chord => chord.symbol === symbol)?.id)
+    .filter(Boolean);
+}
+
+function getPracticeSequence() {
+  const choice = practiceSelect.value;
+
+  if (choice === "practice-list") {
+    return practiceList.length ? practiceList : ["c-major", "g-major", "a-minor", "fmaj7"];
+  }
+
+  if (choice === "random-beginner") {
+    return CHORDS
+      .filter(chord => chord.difficulty === "Beginner")
+      .map(chord => chord.id)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 8);
+  }
+
+  const progression = PROGRESSIONS.find(item => item.id === choice);
+  return progression ? symbolsToChordIds(progression.chords) : ["c-major", "g-major"];
+}
+
+function startSequence(symbolsOrIds, label = "Practice drill") {
+  const ids = symbolsOrIds.every(value => CHORDS.some(chord => chord.id === value))
+    ? symbolsOrIds
+    : symbolsToChordIds(symbolsOrIds);
+
+  if (!ids.length) {
+    return;
+  }
+
+  currentPracticeSequence = ids;
+  currentPracticeIndex = 0;
+  practiceSelect.value = "practice-list";
+  startPracticeTimer(label);
+}
+
+function startPracticeTimer(label = "") {
+  const seq = currentPracticeSequence.length ? currentPracticeSequence : getPracticeSequence();
+
+  if (!seq.length) {
+    practiceHint.textContent = "Add chords to your practice list first.";
+    return;
+  }
+
+  currentPracticeSequence = seq;
+  practiceSeconds = 30;
+  clearInterval(practiceInterval);
+  showCurrentPracticeChord(label);
+  practiceInterval = setInterval(() => {
+    practiceSeconds -= 1;
+    practiceTimer.textContent = practiceSeconds;
+
+    if (practiceSeconds <= 0) {
+      nextPracticeChord();
+    }
+  }, 1000);
+}
+
+function showCurrentPracticeChord(label = "") {
+  const id = currentPracticeSequence[currentPracticeIndex % currentPracticeSequence.length];
+  const chord = CHORDS.find(item => item.id === id);
+
+  if (!chord) {
+    return;
+  }
+
+  selectChord(chord.id);
+  practiceTimer.textContent = practiceSeconds;
+  practiceChord.textContent = chord.symbol;
+  practiceHint.textContent = label
+    ? `${label}: land the shape cleanly, then strum once.`
+    : "Land the shape cleanly, then strum once.";
+}
+
+function nextPracticeChord() {
+  if (!currentPracticeSequence.length) {
+    currentPracticeSequence = getPracticeSequence();
+  }
+
+  currentPracticeIndex = (currentPracticeIndex + 1) % currentPracticeSequence.length;
+  practiceSeconds = 30;
+  showCurrentPracticeChord();
+}
+
+function stopPracticeTimer() {
+  clearInterval(practiceInterval);
+  practiceInterval = null;
+  practiceSeconds = 30;
+  practiceTimer.textContent = "30";
+  practiceChord.textContent = "Practice stopped";
+  practiceHint.textContent = "Choose a drill when you are ready.";
+}
+
+function populateScaleControls() {
+  scaleRootSelect.innerHTML = NOTE_NAMES.map(note => `<option value="${note}">${note}</option>`).join("");
+  scaleRootSelect.value = "C";
+}
+
+function renderScale() {
+  const root = scaleRootSelect.value || "C";
+  const type = scaleTypeSelect.value || "major";
+  const scale = SCALE_DEFS[type];
+  const rootIndex = NOTE_NAMES.indexOf(root);
+  const notes = scale.intervals.map(interval => NOTE_NAMES[(rootIndex + interval) % 12]);
+
+  scaleText.textContent = `${root} ${scale.name}: ${scale.formula}. Learn it slowly, say the note names out loud, then connect it to chords in the same key.`;
+  scaleNotes.innerHTML = notes.map((note, index) => `<span class="note-pill">${escapeHTML(note)}${index === 0 ? " · root" : ""}</span>`).join("");
+}
+
+
 searchInput.addEventListener("input", renderChordList);
 categorySelect.addEventListener("change", renderChordList);
 randomButton.addEventListener("click", randomChord);
 practiceButton.addEventListener("click", togglePracticeChord);
+soundButton.addEventListener("click", playSelectedChordSound);
+leftyButton.addEventListener("click", toggleLeftyMode);
+startPracticeButton.addEventListener("click", () => {
+  currentPracticeSequence = getPracticeSequence();
+  currentPracticeIndex = 0;
+  startPracticeTimer();
+});
+nextPracticeButton.addEventListener("click", nextPracticeChord);
+stopPracticeButton.addEventListener("click", stopPracticeTimer);
+scaleRootSelect.addEventListener("change", renderScale);
+scaleTypeSelect.addEventListener("change", renderScale);
 themeToggle.addEventListener("click", toggleTheme);
 
 if ("serviceWorker" in navigator) {
@@ -904,5 +1283,10 @@ if ("serviceWorker" in navigator) {
 }
 
 applyTheme(theme);
+applyLeftyMode(leftyMode);
+populateScaleControls();
+renderScale();
+renderProgressions();
+renderLessonPath();
 renderSelectedChord();
 renderChordList();
