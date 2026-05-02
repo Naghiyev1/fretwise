@@ -619,3 +619,228 @@ body.lefty .fretboard text {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* v2.1 mode-based UX cleanup */
+
+.mode-switcher {
+  display: inline-flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.mode-button {
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.mode-button.active {
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  color: #211100;
+}
+
+.mode-panel[hidden] {
+  display: none !important;
+}
+
+.mode-panel {
+  margin-bottom: 16px;
+}
+
+.practice-mode {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr 1fr;
+  gap: 16px;
+}
+
+.scales-mode,
+.compare-mode {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.mode-card {
+  min-height: 100%;
+}
+
+.metronome-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.metronome-row label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.metronome-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--border);
+  box-shadow: none;
+}
+
+.metronome-dot.tick {
+  background: var(--accent);
+  box-shadow: 0 0 0 8px var(--soft);
+}
+
+.view-toggle {
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: fit-content;
+  background: var(--card-solid);
+}
+
+.view-toggle button {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.view-toggle button.active {
+  background: var(--soft);
+  color: var(--accent);
+}
+
+.scale-fretboard {
+  margin-top: 14px;
+  display: none;
+  overflow-x: auto;
+}
+
+.scale-fretboard.active {
+  display: block;
+}
+
+.scale-fretboard svg {
+  min-width: 640px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.compare-controls {
+  margin-bottom: 14px;
+}
+
+.compare-result {
+  display: grid;
+  gap: 14px;
+}
+
+.compare-summary {
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--card-solid);
+  border: 1px solid var(--border);
+}
+
+.compare-summary strong {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.compare-summary span {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.change-list {
+  display: grid;
+  gap: 10px;
+}
+
+.change-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--card-solid);
+  border: 1px solid var(--border);
+}
+
+.change-row strong {
+  color: var(--accent);
+}
+
+.change-row span {
+  color: var(--muted);
+}
+
+.compact-diagrams {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.compact-diagram {
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card-solid);
+}
+
+.compact-diagram h4 {
+  margin: 0 0 10px;
+}
+
+.compact-diagram .fretboard {
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1160px) {
+  .practice-mode {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .mode-switcher {
+    display: flex;
+    width: 100%;
+  }
+
+  .mode-button {
+    flex: 1 0 auto;
+  }
+
+  .metronome-row {
+    grid-template-columns: 1fr;
+  }
+
+  .compact-diagrams {
+    grid-template-columns: 1fr;
+  }
+
+  .change-row {
+    grid-template-columns: 1fr;
+  }
+}
