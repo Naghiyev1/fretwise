@@ -13,7 +13,7 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.json" />
 
-  <link rel="stylesheet" href="./style-v1.css?v=1" />
+  <link rel="stylesheet" href="./style-v2.css?v=2" />
 </head>
 <body>
   <main class="app-shell">
@@ -41,6 +41,7 @@
         <option value="minor">Minor</option>
         <option value="seventh">7th</option>
         <option value="sus">Sus / Add</option>
+        <option value="barre">Barre chords</option>
         <option value="favorites">Practice list</option>
       </select>
 
@@ -65,7 +66,11 @@
             <p id="chordSummary">The classic open C shape.</p>
           </div>
 
-          <button id="practiceButton" class="practice-button" type="button">Add to practice</button>
+          <div class="chord-actions">
+            <button id="soundButton" class="secondary-button" type="button">Hear chord</button>
+            <button id="leftyButton" class="secondary-button" type="button">Left-handed</button>
+            <button id="practiceButton" class="practice-button" type="button">Add to practice</button>
+          </div>
         </div>
 
         <div class="visual-grid">
@@ -94,6 +99,56 @@
             <div id="handGuide" class="hand-guide" aria-label="Hand position guide"></div>
           </section>
         </div>
+
+        <section class="learning-lab">
+          <article class="info-card">
+            <h3>Practice Mode</h3>
+            <div class="practice-lab">
+              <select id="practiceSelect" aria-label="Choose practice progression">
+                <option value="practice-list">Practice list</option>
+                <option value="pop-axis">C–G–Am–F</option>
+                <option value="g-family">G–D–Em–C</option>
+                <option value="blues-a">12-bar blues in A</option>
+                <option value="random-beginner">Random beginner chords</option>
+              </select>
+              <div class="timer-row">
+                <button id="startPracticeButton" type="button">Start 30s</button>
+                <button id="nextPracticeButton" type="button">Next</button>
+                <button id="stopPracticeButton" type="button">Stop</button>
+              </div>
+              <div class="practice-display">
+                <span id="practiceTimer">30</span>
+                <strong id="practiceChord">Choose a drill</strong>
+                <small id="practiceHint">Switch slowly. Clean sound beats speed.</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="info-card">
+            <h3>Progressions</h3>
+            <div id="progressionList" class="progression-list"></div>
+          </article>
+
+          <article class="info-card">
+            <h3>Beginner Path</h3>
+            <div id="lessonPath" class="lesson-path"></div>
+          </article>
+
+          <article class="info-card scale-card">
+            <h3>Scale Explorer</h3>
+            <div class="scale-controls">
+              <select id="scaleRootSelect" aria-label="Scale root"></select>
+              <select id="scaleTypeSelect" aria-label="Scale type">
+                <option value="major">Major scale</option>
+                <option value="minor">Natural minor</option>
+                <option value="pentatonicMinor">Minor pentatonic</option>
+                <option value="blues">Blues scale</option>
+              </select>
+            </div>
+            <p id="scaleText"></p>
+            <div id="scaleNotes" class="note-row"></div>
+          </article>
+        </section>
 
         <section class="explanation-grid">
           <article class="info-card">
@@ -131,6 +186,6 @@
     </section>
   </main>
 
-  <script src="./app-v1.js?v=1"></script>
+  <script src="./app-v2.js?v=2"></script>
 </body>
 </html>
