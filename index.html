@@ -13,7 +13,7 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.json" />
 
-  <link rel="stylesheet" href="./style-v2.css?v=2" />
+  <link rel="stylesheet" href="./style-v2-1.css?v=2.1" />
 </head>
 <body>
   <main class="app-shell">
@@ -46,6 +46,13 @@
       </select>
 
       <button id="randomButton" type="button">Random</button>
+    </section>
+
+    <section class="mode-switcher" aria-label="Learning mode">
+      <button class="mode-button active" type="button" data-mode="learn">Learn</button>
+      <button class="mode-button" type="button" data-mode="practice">Practice</button>
+      <button class="mode-button" type="button" data-mode="scales">Scales</button>
+      <button class="mode-button" type="button" data-mode="compare">Compare</button>
     </section>
 
     <section class="layout">
@@ -100,8 +107,8 @@
           </section>
         </div>
 
-        <section class="learning-lab">
-          <article class="info-card">
+        <section class="mode-panel practice-mode" data-mode-panel="practice" hidden>
+          <article class="info-card mode-card">
             <h3>Practice Mode</h3>
             <div class="practice-lab">
               <select id="practiceSelect" aria-label="Choose practice progression">
@@ -111,11 +118,25 @@
                 <option value="blues-a">12-bar blues in A</option>
                 <option value="random-beginner">Random beginner chords</option>
               </select>
+
+              <div class="metronome-row">
+                <label for="metronomeSelect">Metronome</label>
+                <select id="metronomeSelect" aria-label="Metronome BPM">
+                  <option value="0">Off</option>
+                  <option value="60">60 BPM</option>
+                  <option value="80" selected>80 BPM</option>
+                  <option value="100">100 BPM</option>
+                  <option value="120">120 BPM</option>
+                </select>
+                <span id="metronomeDot" class="metronome-dot"></span>
+              </div>
+
               <div class="timer-row">
                 <button id="startPracticeButton" type="button">Start 30s</button>
                 <button id="nextPracticeButton" type="button">Next</button>
                 <button id="stopPracticeButton" type="button">Stop</button>
               </div>
+
               <div class="practice-display">
                 <span id="practiceTimer">30</span>
                 <strong id="practiceChord">Choose a drill</strong>
@@ -124,17 +145,19 @@
             </div>
           </article>
 
-          <article class="info-card">
+          <article class="info-card mode-card">
             <h3>Progressions</h3>
             <div id="progressionList" class="progression-list"></div>
           </article>
 
-          <article class="info-card">
+          <article class="info-card mode-card">
             <h3>Beginner Path</h3>
             <div id="lessonPath" class="lesson-path"></div>
           </article>
+        </section>
 
-          <article class="info-card scale-card">
+        <section class="mode-panel scales-mode" data-mode-panel="scales" hidden>
+          <article class="info-card mode-card scale-card">
             <h3>Scale Explorer</h3>
             <div class="scale-controls">
               <select id="scaleRootSelect" aria-label="Scale root"></select>
@@ -144,13 +167,36 @@
                 <option value="pentatonicMinor">Minor pentatonic</option>
                 <option value="blues">Blues scale</option>
               </select>
+              <div class="view-toggle">
+                <button id="scaleNotesViewButton" class="active" type="button">Notes</button>
+                <button id="scaleFretboardViewButton" type="button">Fretboard</button>
+              </div>
             </div>
             <p id="scaleText"></p>
             <div id="scaleNotes" class="note-row"></div>
+            <div id="scaleFretboard" class="scale-fretboard"></div>
           </article>
         </section>
 
-        <section class="explanation-grid">
+        <section class="mode-panel compare-mode" data-mode-panel="compare" hidden>
+          <article class="info-card mode-card compare-card">
+            <h3>Chord Comparison</h3>
+            <div class="compare-controls">
+              <select id="compareSelect" aria-label="Choose chord comparison">
+                <option value="c-cadd9">C vs Cadd9</option>
+                <option value="a-asus2">A vs Asus2</option>
+                <option value="a-asus4">A vs Asus4</option>
+                <option value="d-dsus2">D vs Dsus2</option>
+                <option value="d-dsus4">D vs Dsus4</option>
+                <option value="g-g7">G vs G7</option>
+                <option value="e-e7">E vs E7</option>
+              </select>
+            </div>
+            <div id="compareResult" class="compare-result"></div>
+          </article>
+        </section>
+
+        <section class="explanation-grid mode-panel" data-mode-panel="learn">
           <article class="info-card">
             <h3>Finger-by-finger</h3>
             <div id="fingerGuide" class="guide-list"></div>
@@ -186,6 +232,6 @@
     </section>
   </main>
 
-  <script src="./app-v2.js?v=2"></script>
+  <script src="./app-v2-1.js?v=2.1"></script>
 </body>
 </html>
