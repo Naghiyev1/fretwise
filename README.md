@@ -1,27 +1,45 @@
-# Fretwise v2
+# Fretwise v2.1
 
-A free static guitar chord teacher for beginners and improving players.
+A free static guitar chord teacher with a cleaner mode-based learning interface.
+
+## What changed in v2.1
+
+This version keeps the app useful without making the page feel overloaded.
+
+New structure:
+
+```text
+Learn
+Practice
+Scales
+Compare
+```
+
+Only one mode is visible at a time.
 
 ## What it does
 
 - Shows visual guitar chord diagrams
-- Explains which finger goes to which string and fret
-- Explains each string one by one
+- Explains finger placement
+- Explains strings one by one
 - Shows muted and open strings
 - Highlights chord notes and root notes
 - Includes a stylized hand-position guide
-- Plays a synthesized audio version of the selected chord using Web Audio
+- Plays a synthesized chord sound using Web Audio
 - Includes timed practice mode
-- Includes common progressions:
-  - C–G–Am–F
-  - G–D–Em–C
-  - 12-bar blues in A
+- Adds a simple metronome
+- Includes common progressions
 - Includes beginner lesson paths
-- Includes a scale explorer:
-  - Major scale
-  - Natural minor
-  - Minor pentatonic
-  - Blues scale
+- Includes a scale explorer
+- Adds a fretboard scale view
+- Includes chord comparison:
+  - C vs Cadd9
+  - A vs Asus2
+  - A vs Asus4
+  - D vs Dsus2
+  - D vs Dsus4
+  - G vs G7
+  - E vs E7
 - Includes left-handed mode
 - Includes barre chord category
 - Includes practice list saved locally
@@ -37,8 +55,8 @@ A free static guitar chord teacher for beginners and improving players.
 ```text
 fretwise/
   index.html
-  style-v2.css
-  app-v2.js
+  style-v2-1.css
+  app-v2-1.js
   README.md
   icon.svg
   manifest.json
@@ -61,6 +79,6 @@ app.js
 
 ## Notes
 
-The chord audio is generated with the browser Web Audio API. It is meant to teach pitch/chord quality, not to imitate a realistic guitar recording.
+The chord audio and metronome are generated with the browser Web Audio API. They are educational references, not realistic guitar recordings.
 
-The hand view is a stylized educational guide, not a realistic hand photo. This keeps the app fast, scalable, and easy to extend with more chords.
+The hand view is a stylized educational guide, not a realistic hand photo.
