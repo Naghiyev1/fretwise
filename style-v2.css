@@ -456,3 +456,166 @@ ul {
     font-size: 48px;
   }
 }
+
+
+/* v2 learning features */
+
+.chord-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.secondary-button {
+  border: 1px solid var(--border);
+  min-height: 50px;
+  border-radius: 16px;
+  background: var(--card-solid);
+  color: var(--ink);
+  font-weight: 900;
+  cursor: pointer;
+  padding: 0 16px;
+}
+
+.secondary-button.active {
+  background: #2563eb;
+  color: white;
+  border-color: transparent;
+}
+
+.learning-lab {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.practice-lab,
+.progression-list,
+.lesson-path {
+  display: grid;
+  gap: 10px;
+}
+
+.practice-lab select,
+.scale-controls select {
+  min-height: 44px;
+  border-radius: 14px;
+}
+
+.timer-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.timer-row button {
+  border: none;
+  min-height: 42px;
+  border-radius: 14px;
+  background: var(--soft);
+  color: var(--accent);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.practice-display {
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--card-solid);
+  border: 1px solid var(--border);
+  display: grid;
+  gap: 4px;
+}
+
+.practice-display span {
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  color: var(--accent);
+}
+
+.practice-display strong {
+  font-size: 24px;
+}
+
+.practice-display small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.progression-button,
+.lesson-button {
+  border: 1px solid var(--border);
+  background: var(--card-solid);
+  color: var(--ink);
+  border-radius: 16px;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.progression-button strong,
+.lesson-button strong {
+  display: block;
+}
+
+.progression-button span,
+.lesson-button span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.scale-card {
+  grid-column: span 1;
+}
+
+.scale-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+body.lefty .fretboard {
+  transform: scaleX(-1);
+}
+
+body.lefty .fretboard text,
+body.lefty .fretboard circle {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+body.lefty .fretboard text {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 1160px) {
+  .learning-lab {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .learning-lab {
+    grid-template-columns: 1fr;
+  }
+
+  .chord-actions {
+    justify-content: stretch;
+  }
+
+  .chord-actions button {
+    flex: 1 1 100%;
+  }
+
+  .timer-row {
+    grid-template-columns: 1fr;
+  }
+}
