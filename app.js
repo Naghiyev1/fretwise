@@ -671,6 +671,15 @@ const scaleRootSelect = document.getElementById("scaleRootSelect");
 const scaleTypeSelect = document.getElementById("scaleTypeSelect");
 const scaleText = document.getElementById("scaleText");
 const scaleNotes = document.getElementById("scaleNotes");
+const scaleFretboard = document.getElementById("scaleFretboard");
+const scaleNotesViewButton = document.getElementById("scaleNotesViewButton");
+const scaleFretboardViewButton = document.getElementById("scaleFretboardViewButton");
+const compareSelect = document.getElementById("compareSelect");
+const compareResult = document.getElementById("compareResult");
+const metronomeSelect = document.getElementById("metronomeSelect");
+const metronomeDot = document.getElementById("metronomeDot");
+const modeButtons = Array.from(document.querySelectorAll(".mode-button"));
+const modePanels = Array.from(document.querySelectorAll("[data-mode-panel]"));
 
 const chordCategory = document.getElementById("chordCategory");
 const chordName = document.getElementById("chordName");
@@ -691,9 +700,12 @@ let practiceList = JSON.parse(localStorage.getItem("fretwisePracticeList") || "[
 let theme = localStorage.getItem("fretwiseTheme") || "light";
 let leftyMode = localStorage.getItem("fretwiseLefty") || "off";
 let practiceInterval = null;
+let metronomeInterval = null;
 let practiceSeconds = 30;
 let currentPracticeSequence = [];
 let currentPracticeIndex = 0;
+let activeMode = localStorage.getItem("fretwiseMode") || "learn";
+let scaleView = localStorage.getItem("fretwiseScaleView") || "notes";
 
 const PROGRESSIONS = [
   { id: "pop-axis", name: "C–G–Am–F", chords: ["C", "G", "Am", "Fmaj7"], note: "The classic pop progression. Use Fmaj7 as a beginner-friendly F." },
@@ -708,6 +720,16 @@ const LESSONS = [
   { name: "Suspended colors", chords: ["Dsus2", "Dsus4", "Asus2", "Asus4", "Cadd9"], note: "Add movement without changing the whole chord shape." },
   { name: "Barre chord entry", chords: ["F", "Bm", "F#m", "Bb"], note: "Train index-finger strength gradually. Clean beats loud." }
 ];
+
+const COMPARISONS = {
+  "c-cadd9": { from: "C", to: "Cadd9", sound: "C is stable and resolved. Cadd9 keeps the C major core but adds D, giving a more open modern pop/rock color." },
+  "a-asus2": { from: "A", to: "Asus2", sound: "A major has C# as the 3rd. Asus2 replaces that 3rd with B, so it sounds open and less settled." },
+  "a-asus4": { from: "A", to: "Asus4", sound: "Asus4 replaces the 3rd with D. It creates tension that wants to fall back to A." },
+  "d-dsus2": { from: "D", to: "Dsus2", sound: "Dsus2 removes the major 3rd and uses E instead. It sounds lighter and more suspended." },
+  "d-dsus4": { from: "D", to: "Dsus4", sound: "Dsus4 adds G on top. It feels lifted and wants to resolve back to D." },
+  "g-g7": { from: "G", to: "G7", sound: "G7 adds F, the flat 7th. That creates a bluesy pull toward C." },
+  "e-e7": { from: "E", to: "E7", sound: "E7 adds D, making the chord more tense and bluesy. It naturally pulls toward A." }
+};
 
 const SCALE_DEFS = {
   major: { name: "Major scale", intervals: [0, 2, 4, 5, 7, 9, 11], formula: "1 2 3 4 5 6 7" },
@@ -1195,6 +1217,7 @@ function startPracticeTimer(label = "") {
   practiceSeconds = 30;
   clearInterval(practiceInterval);
   showCurrentPracticeChord(label);
+  startMetronome();
   practiceInterval = setInterval(() => {
     practiceSeconds -= 1;
     practiceTimer.textContent = practiceSeconds;
@@ -1234,6 +1257,7 @@ function nextPracticeChord() {
 function stopPracticeTimer() {
   clearInterval(practiceInterval);
   practiceInterval = null;
+  stopMetronome();
   practiceSeconds = 30;
   practiceTimer.textContent = "30";
   practiceChord.textContent = "Practice stopped";
@@ -1254,6 +1278,207 @@ function renderScale() {
 
   scaleText.textContent = `${root} ${scale.name}: ${scale.formula}. Learn it slowly, say the note names out loud, then connect it to chords in the same key.`;
   scaleNotes.innerHTML = notes.map((note, index) => `<span class="note-pill">${escapeHTML(note)}${index === 0 ? " · root" : ""}</span>`).join("");
+  renderScaleFretboard(notes, root);
+  setScaleView(scaleView);
+}
+
+
+
+function setMode(mode) {
+  activeMode = mode || "learn";
+  localStorage.setItem("fretwiseMode", activeMode);
+
+  modeButtons.forEach(button => {
+    button.classList.toggle("active", button.dataset.mode === activeMode);
+  });
+
+  modePanels.forEach(panel => {
+    panel.hidden = panel.dataset.modePanel !== activeMode;
+  });
+}
+
+function playMetronomeClick() {
+  const bpm = Number(metronomeSelect.value || 0);
+
+  if (!bpm) {
+    stopMetronome();
+    return;
+  }
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) {
+    return;
+  }
+
+  const context = new AudioContextClass();
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  const now = context.currentTime;
+
+  oscillator.type = "square";
+  oscillator.frequency.value = 880;
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.08, now + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.075);
+
+  oscillator.connect(gain).connect(context.destination);
+  oscillator.start(now);
+  oscillator.stop(now + 0.08);
+
+  metronomeDot.classList.add("tick");
+  setTimeout(() => metronomeDot.classList.remove("tick"), 90);
+}
+
+function startMetronome() {
+  stopMetronome();
+  const bpm = Number(metronomeSelect.value || 0);
+
+  if (!bpm) {
+    return;
+  }
+
+  playMetronomeClick();
+  metronomeInterval = setInterval(playMetronomeClick, 60000 / bpm);
+}
+
+function stopMetronome() {
+  clearInterval(metronomeInterval);
+  metronomeInterval = null;
+  metronomeDot.classList.remove("tick");
+}
+
+function setScaleView(view) {
+  scaleView = view === "fretboard" ? "fretboard" : "notes";
+  localStorage.setItem("fretwiseScaleView", scaleView);
+  scaleNotesViewButton.classList.toggle("active", scaleView === "notes");
+  scaleFretboardViewButton.classList.toggle("active", scaleView === "fretboard");
+  scaleNotes.style.display = scaleView === "notes" ? "flex" : "none";
+  scaleFretboard.classList.toggle("active", scaleView === "fretboard");
+}
+
+function renderScaleFretboard(notes, root) {
+  const width = 780;
+  const height = 260;
+  const marginX = 54;
+  const topY = 42;
+  const stringGap = 32;
+  const fretGap = 54;
+  const fretCount = 12;
+
+  const openStrings = ["E", "A", "D", "G", "B", "E"];
+  const semitoneMap = { C:0, "C#":1, Db:1, D:2, "D#":3, Eb:3, E:4, F:5, "F#":6, Gb:6, G:7, "G#":8, Ab:8, A:9, "A#":10, Bb:10, B:11 };
+  const reverseNames = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+  const scaleSet = new Set(notes);
+
+  let svg = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${root} scale fretboard">`;
+  svg += `<rect x="16" y="16" width="${width - 32}" height="${height - 32}" rx="22" fill="var(--card-solid)" stroke="var(--border)" />`;
+
+  for (let s = 0; s < 6; s++) {
+    const y = topY + s * stringGap;
+    svg += `<line x1="${marginX}" y1="${y}" x2="${marginX + fretGap * fretCount}" y2="${y}" stroke="var(--ink)" stroke-opacity="0.35" stroke-width="${2 + (5 - s) * 0.3}" />`;
+    svg += `<text x="${marginX - 24}" y="${y + 5}" text-anchor="middle" fill="var(--muted)" font-size="12" font-weight="800">${openStrings[s]}</text>`;
+  }
+
+  for (let f = 0; f <= fretCount; f++) {
+    const x = marginX + f * fretGap;
+    svg += `<line x1="${x}" y1="${topY - 14}" x2="${x}" y2="${topY + stringGap * 5 + 14}" stroke="var(--ink)" stroke-opacity="${f === 0 ? "0.6" : "0.25"}" stroke-width="${f === 0 ? 6 : 2}" />`;
+    if (f > 0) {
+      svg += `<text x="${x - fretGap / 2}" y="${height - 28}" text-anchor="middle" fill="var(--muted)" font-size="11" font-weight="800">${f}</text>`;
+    }
+  }
+
+  openStrings.forEach((openNote, s) => {
+    const openIndex = semitoneMap[openNote];
+    for (let f = 0; f <= fretCount; f++) {
+      const note = reverseNames[(openIndex + f) % 12];
+      if (!scaleSet.has(note)) continue;
+
+      const x = f === 0 ? marginX - 1 : marginX + (f - 0.5) * fretGap;
+      const y = topY + s * stringGap;
+      const isRoot = note === root;
+
+      svg += `<circle cx="${x}" cy="${y}" r="${isRoot ? 13 : 10}" fill="${isRoot ? "var(--accent)" : "var(--soft)"}" stroke="${isRoot ? "white" : "var(--accent)"}" stroke-width="${isRoot ? 3 : 2}" />`;
+      svg += `<text x="${x}" y="${y + 4}" text-anchor="middle" fill="${isRoot ? "white" : "var(--accent)"}" font-size="10" font-weight="900">${note.replace("#", "♯")}</text>`;
+    }
+  });
+
+  svg += `</svg>`;
+  scaleFretboard.innerHTML = svg;
+}
+
+function renderComparison() {
+  const comparison = COMPARISONS[compareSelect.value] || COMPARISONS["c-cadd9"];
+  const from = CHORDS.find(chord => chord.symbol === comparison.from);
+  const to = CHORDS.find(chord => chord.symbol === comparison.to);
+
+  if (!from || !to) {
+    compareResult.innerHTML = `<div class="empty-state">Comparison unavailable.</div>`;
+    return;
+  }
+
+  const changes = STRINGS.map((string, index) => {
+    const fromFret = from.frets[index];
+    const toFret = to.frets[index];
+    const fromFinger = from.fingers[index];
+    const toFinger = to.fingers[index];
+
+    if (String(fromFret) === String(toFret) && String(fromFinger) === String(toFinger)) {
+      return null;
+    }
+
+    return {
+      string,
+      from: describeFret(fromFret, fromFinger),
+      to: describeFret(toFret, toFinger)
+    };
+  }).filter(Boolean);
+
+  const changesHtml = changes.length
+    ? changes.map(change => `
+      <div class="change-row">
+        <strong>String ${change.string.number}</strong>
+        <span>${escapeHTML(change.from)} → ${escapeHTML(change.to)}</span>
+      </div>
+    `).join("")
+    : `<div class="change-row"><strong>No fingering change</strong><span>The difference is theoretical or voicing-based.</span></div>`;
+
+  compareResult.innerHTML = `
+    <div class="compare-summary">
+      <strong>${escapeHTML(from.symbol)} → ${escapeHTML(to.symbol)}</strong>
+      <span>${escapeHTML(comparison.sound)}</span>
+    </div>
+    <div class="change-list">${changesHtml}</div>
+    <div class="compact-diagrams">
+      <div class="compact-diagram">
+        <h4>${escapeHTML(from.symbol)}</h4>
+        <div id="compareFromDiagram"></div>
+      </div>
+      <div class="compact-diagram">
+        <h4>${escapeHTML(to.symbol)}</h4>
+        <div id="compareToDiagram"></div>
+      </div>
+    </div>
+  `;
+
+  const oldMain = chordDiagram.innerHTML;
+  const tempMain = chordDiagram;
+  renderDiagramInto(from, document.getElementById("compareFromDiagram"));
+  renderDiagramInto(to, document.getElementById("compareToDiagram"));
+}
+
+function describeFret(fret, finger) {
+  if (fret === "x") return "muted";
+  if (fret === 0) return "open";
+  return `fret ${fret}, finger ${finger}`;
+}
+
+function renderDiagramInto(chord, container) {
+  const previous = chordDiagram;
+  const originalHtml = chordDiagram.innerHTML;
+  const realRenderTarget = chordDiagram;
+  renderDiagram(chord);
+  container.innerHTML = chordDiagram.innerHTML;
+  chordDiagram.innerHTML = originalHtml;
 }
 
 
@@ -1272,6 +1497,15 @@ nextPracticeButton.addEventListener("click", nextPracticeChord);
 stopPracticeButton.addEventListener("click", stopPracticeTimer);
 scaleRootSelect.addEventListener("change", renderScale);
 scaleTypeSelect.addEventListener("change", renderScale);
+scaleNotesViewButton.addEventListener("click", () => setScaleView("notes"));
+scaleFretboardViewButton.addEventListener("click", () => setScaleView("fretboard"));
+compareSelect.addEventListener("change", renderComparison);
+metronomeSelect.addEventListener("change", () => {
+  if (practiceInterval) startMetronome();
+});
+modeButtons.forEach(button => {
+  button.addEventListener("click", () => setMode(button.dataset.mode));
+});
 themeToggle.addEventListener("click", toggleTheme);
 
 if ("serviceWorker" in navigator) {
@@ -1288,5 +1522,7 @@ populateScaleControls();
 renderScale();
 renderProgressions();
 renderLessonPath();
+renderComparison();
+setMode(activeMode);
 renderSelectedChord();
 renderChordList();
