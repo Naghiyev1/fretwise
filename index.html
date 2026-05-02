@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Fretwise</title>
+  <meta
+    name="description"
+    content="A free guitar chord teacher that explains finger placement, strings, notes, and chord practice."
+  />
+  <meta name="theme-color" content="#111827" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.json" />
+
+  <link rel="stylesheet" href="./style-v1.css?v=1" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <section>
+        <p class="eyebrow">Free guitar chord teacher</p>
+        <h1>Fretwise</h1>
+        <p class="subtitle">
+          Learn chords properly: which finger goes where, which strings to play, which strings to mute,
+          and how to make the shape sound clean.
+        </p>
+      </section>
+
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        Dark Mode
+      </button>
+    </header>
+
+    <section class="controls" aria-label="Chord controls">
+      <input id="searchInput" type="search" placeholder="Search chord, note, type..." />
+
+      <select id="categorySelect" aria-label="Chord category">
+        <option value="all" selected>All chords</option>
+        <option value="major">Major</option>
+        <option value="minor">Minor</option>
+        <option value="seventh">7th</option>
+        <option value="sus">Sus / Add</option>
+        <option value="favorites">Practice list</option>
+      </select>
+
+      <button id="randomButton" type="button">Random</button>
+    </section>
+
+    <section class="layout">
+      <aside class="library-panel">
+        <div class="panel-header">
+          <strong>Chord Library</strong>
+          <span id="chordCount">0 chords</span>
+        </div>
+
+        <div id="chordList" class="chord-list" aria-label="Chord list"></div>
+      </aside>
+
+      <section class="teacher-panel">
+        <div class="chord-header">
+          <div>
+            <p id="chordCategory" class="chord-category">Major</p>
+            <h2 id="chordName">C Major</h2>
+            <p id="chordSummary">The classic open C shape.</p>
+          </div>
+
+          <button id="practiceButton" class="practice-button" type="button">Add to practice</button>
+        </div>
+
+        <div class="visual-grid">
+          <section class="diagram-card">
+            <div class="card-title">
+              <strong>Chord Diagram</strong>
+              <span id="tuningLabel">E A D G B E</span>
+            </div>
+
+            <div id="chordDiagram" class="chord-diagram" aria-label="Chord diagram"></div>
+
+            <div class="legend">
+              <span><i class="finger-1"></i>1 Index</span>
+              <span><i class="finger-2"></i>2 Middle</span>
+              <span><i class="finger-3"></i>3 Ring</span>
+              <span><i class="finger-4"></i>4 Pinky</span>
+            </div>
+          </section>
+
+          <section class="hand-card">
+            <div class="card-title">
+              <strong>Hand Position</strong>
+              <span>Finger map</span>
+            </div>
+
+            <div id="handGuide" class="hand-guide" aria-label="Hand position guide"></div>
+          </section>
+        </div>
+
+        <section class="explanation-grid">
+          <article class="info-card">
+            <h3>Finger-by-finger</h3>
+            <div id="fingerGuide" class="guide-list"></div>
+          </article>
+
+          <article class="info-card">
+            <h3>String-by-string</h3>
+            <div id="stringGuide" class="guide-list"></div>
+          </article>
+
+          <article class="info-card">
+            <h3>Why this chord works</h3>
+            <p id="theoryText"></p>
+            <div id="noteRow" class="note-row"></div>
+          </article>
+
+          <article class="info-card">
+            <h3>Make it sound clean</h3>
+            <ul id="tipsList"></ul>
+          </article>
+
+          <article class="info-card">
+            <h3>Common mistakes</h3>
+            <ul id="mistakesList"></ul>
+          </article>
+
+          <article class="info-card">
+            <h3>Practice transitions</h3>
+            <div id="transitionRow" class="transition-row"></div>
+          </article>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="./app-v1.js?v=1"></script>
+</body>
+</html>
