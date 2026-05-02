@@ -1,9 +1,9 @@
-const CACHE_NAME = "fretwise-v1";
+const CACHE_NAME = "fretwise-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./style-v1.css",
-  "./app-v1.js",
+  "./style-v2.css",
+  "./app-v2.js",
   "./icon.svg",
   "./manifest.json"
 ];
